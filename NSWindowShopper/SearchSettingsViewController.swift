@@ -12,11 +12,16 @@ import UIKit
 class SearchSettingsViewController : UIViewController {
     
     override func viewDidLoad() {
-        let button = UIBarButtonItem(title: "Apply", style: UIBarButtonItemStyle.Done, target: self, action: Selector("handleApplyPressed"))
-        self.navigationItem.setRightBarButtonItem(button, animated: false)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Done, target: self, action: Selector("handleCancelPressed"))
+        let resetButton = UIBarButtonItem(title: "Reset", style: UIBarButtonItemStyle.Done, target: self, action: Selector("handleResetPressed"))
+        self.navigationItem.setRightBarButtonItem(cancelButton, animated: false)
+        self.navigationItem.setLeftBarButtonItem(resetButton, animated: false)
     }
     
-    func handleApplyPressed() {
+    func CancelApplyPressed() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    func ResetApplyPressed() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
