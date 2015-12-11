@@ -25,25 +25,9 @@ class ItemListTableViewController : UITableViewController, NeedsDataFromSearchRe
         
         self.tableView.separatorColor = ColorProvider.whiteColor
         self.tableView.contentInset = UIEdgeInsets(top: 108, left: 0, bottom: 0, right: 0)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceOrientationDidChange", name: UIDeviceOrientationDidChangeNotification, object: nil)
     }
     
     override func viewWillLayoutSubviews() {
-        if (UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation)) {
-            self.tableView.contentInset.top = 88
-        } else if (UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation)) {
-            self.tableView.contentInset.top = 108
-        }
-        
-        super.viewWillLayoutSubviews()
-    }
-    
-    func deviceOrientationDidChange() {
-        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown) {
-            return;
-        }
-        
         if (UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation)) {
             self.tableView.contentInset.top = 88
         } else if (UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation)) {
@@ -53,6 +37,8 @@ class ItemListTableViewController : UITableViewController, NeedsDataFromSearchRe
                 self.tableView.contentOffset.y = -108
             }
         }
+        
+        super.viewWillLayoutSubviews()
     }
     
     // MARK - NeedsDataFromSearchResults
@@ -84,7 +70,7 @@ class ItemListTableViewController : UITableViewController, NeedsDataFromSearchRe
         if (indexPath.row < self.items!.count) {
             let cell = tableView.dequeueReusableCellWithIdentifier("ItemListTableViewCell") as! ItemListTableViewCell;
             cell.configureWithItem(self.items![indexPath.row])
-            cell.backgroundColor = ColorProvider.colorForItemPosition(indexPath.row)
+            cell.backgroundColor = ColorProvider.colorForItemPosition(Double(indexPath.row))
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreTableViewCell");
@@ -96,7 +82,7 @@ class ItemListTableViewController : UITableViewController, NeedsDataFromSearchRe
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         if (indexPath.row < self.items!.count) {
-            CommandNavigateToItemDetail.executeWithNavigationController(self.navigationController!, withItem: self.items![indexPath.row], andColor: ColorProvider.colorForItemPosition(indexPath.item))
+            CommandNavigateToItemDetail.executeWithNavigationController(self.navigationController!, withItem: self.items![indexPath.row], andColor: ColorProvider.colorForItemPosition(Double(indexPath.item)))
         } else {
             self.dataProvder?.loadNextPage()
         }

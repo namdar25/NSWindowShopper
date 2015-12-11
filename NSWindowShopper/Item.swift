@@ -25,7 +25,8 @@ class Item {
         if (self.price!.doubleValue % 1 == 0) {
             return "$\(self.price!.integerValue)"
         } else {
-            return "$\(String(format: "%.2f", self.price!.doubleValue))"
+            let priceString = String(format: "%.2f", self.price!.doubleValue)
+            return "$\(priceString)"
         }
     }
     

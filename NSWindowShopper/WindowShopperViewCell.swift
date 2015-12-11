@@ -18,35 +18,45 @@ class WindowShopperViewCell : UICollectionViewCell {
     var mostRecentlyLoadedImageURL : String?
     var hasConfiguredStaticUI : Bool = false
     
+    // MARK - UI Configuration
+    
     func configureWithItem(item : Item) {
+        self.firstTimeUISetupIfNeeded()
+        
+        self.loadItemImage(item.hdImageURL!)
+        self.titleLabel.text = item.name;
+        self.priceLabel.text = item.formattedPriceText()
+    }
+    
+    private func firstTimeUISetupIfNeeded() {
         if (!hasConfiguredStaticUI) {
             self.contentView.layer.cornerRadius = 9.0;
-            //self.contentView.layer.borderColor = UIColor(white: 0.9, alpha: 1).CGColor
-           // self.contentView.layer.borderWidth = 2
             self.contentView.clipsToBounds = true;
             
             self.itemImageView.clipsToBounds = true;
-            
             self.itemImageView.contentMode = UIViewContentMode.ScaleAspectFill
+            
+//            self.layer.shadowColor = ColorProvider.darkBorderColor.CGColor
+//            self.layer.shadowRadius = 5
+//            self.layer.shadowOpacity = 0.5
+//            self.layer.masksToBounds = false;
+//            self.layer.shadowOffset = CGSize(width: 0, height: 4)
+            
             hasConfiguredStaticUI = true
         }
-        
-        self.mostRecentlyLoadedImageURL = item.hdImageURL!
+    }
+    
+    private func loadItemImage(imageURL : String) {
+        self.mostRecentlyLoadedImageURL = imageURL
         weak var weakSelf = self;
-        ImageLoader.loadImageAtURL(item.hdImageURL!) { (loadedImage, loadedImageURL) -> Void in
+        ImageLoader.loadImageAtURL(imageURL) { (loadedImage, loadedImageURL) -> Void in
             if (weakSelf != nil && weakSelf!.mostRecentlyLoadedImageURL == loadedImageURL) {
                 weakSelf!.itemImageView.image = loadedImage
             }
         }
-        
-        self.titleLabel.text = item.name;
-        
-        if (item.price!.doubleValue % 1 == 0) {
-            self.priceLabel.text = "$\(item.price!.integerValue)"
-        } else {
-            self.priceLabel.text = "$\(String(format: "%.2f", item.price!.doubleValue))"
-        }
     }
+    
+    // MARK - Cell Lifecycle
     
     override func prepareForReuse() {
         super.prepareForReuse()

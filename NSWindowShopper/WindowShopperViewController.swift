@@ -14,7 +14,7 @@ class WindowShopperViewController : UICollectionViewController, NeedsDataFromSea
     var items : [Item]?
     weak var dataProvder : ItemDataProvider?
     
-    private let padding : CGFloat = 10.0
+    private let padding : CGFloat = 20.0
     
     // MARK - Lifecycle
     
@@ -67,6 +67,13 @@ class WindowShopperViewController : UICollectionViewController, NeedsDataFromSea
         self.collectionView?.reloadData()
     }
     
+    // MARK - ScrollView Delegate
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        let viewPosition = (self.collectionView?.contentOffset.x)! / (self.collectionView?.frame.width)!
+        self.collectionView?.backgroundColor = ColorProvider.colorForItemPosition(Double(viewPosition) + ColorProvider.indicesPerCycle / 4.0)
+    }
+    
     // MARK - UICollectionView
     
     func collectionView(collectionView : UICollectionView,layout collectionViewLayout:UICollectionViewLayout,sizeForItemAtIndexPath indexPath:NSIndexPath) -> CGSize {
@@ -84,7 +91,12 @@ class WindowShopperViewController : UICollectionViewController, NeedsDataFromSea
         if (indexPath.item < self.items!.count) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WindowShopperViewCell", forIndexPath: indexPath) as! WindowShopperViewCell
             cell.configureWithItem(self.items![indexPath.item])
-            cell.contentView.backgroundColor = ColorProvider.colorForItemPosition(indexPath.item)
+            cell.contentView.backgroundColor = ColorProvider.colorForItemPosition(Double(indexPath.item))
+            
+            self.preloadImageAtIndex(indexPath.item + 1)
+            self.preloadImageAtIndex(indexPath.item + 2)
+            self.preloadImageAtIndex(indexPath.item + 3)
+            
             return cell
         } else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadMoreCollectionViewCell", forIndexPath: indexPath)
@@ -98,11 +110,18 @@ class WindowShopperViewController : UICollectionViewController, NeedsDataFromSea
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         
         if (indexPath.row < self.items!.count) {
-            CommandNavigateToItemDetail.executeWithNavigationController(self.navigationController!, withItem: self.items![indexPath.row], andColor: ColorProvider.colorForItemPosition(indexPath.item))
+            CommandNavigateToItemDetail.executeWithNavigationController(self.navigationController!, withItem: self.items![indexPath.row], andColor: ColorProvider.colorForItemPosition(Double(indexPath.item)))
         } else {
             self.dataProvder?.loadNextPage()
         }
     }
-
+    
+    // MARK - Preloading Images
+    
+    func preloadImageAtIndex(index : Int) {
+        if (index < self.items!.count) {
+            ImageLoader.loadImageAtURL(self.items![index].hdImageURL!, andCompletionHander: nil)
+        }
+    }
     
 }

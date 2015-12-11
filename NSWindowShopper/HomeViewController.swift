@@ -15,9 +15,9 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     var hasAddedConstraints = false
     var searchResultsProxy : SearchResultsProxy?
     
+    var windowShopperViewController : WindowShopperViewController?
     var itemListTableViewController : ItemListTableViewController?
     var itemCollectionViewController: ItemCollectionViewController?
-    var windowShopperViewController : WindowShopperViewController?
     
     @IBOutlet weak var viewSelector: UISegmentedControl!
     @IBOutlet weak var loadingOverlay: UIVisualEffectView!
@@ -43,20 +43,21 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     }
     
     func createSubViewControllers() {
+        self.windowShopperViewController = storyboard?.instantiateViewControllerWithIdentifier("WindowShopperViewController") as? WindowShopperViewController
+        self.windowShopperViewController!.dataProvder = self;
+        
         self.itemListTableViewController = storyboard?.instantiateViewControllerWithIdentifier("ItemListTableViewController") as? ItemListTableViewController
         self.itemListTableViewController!.dataProvder = self;
         
         self.itemCollectionViewController = storyboard?.instantiateViewControllerWithIdentifier("ItemCollectionViewController") as? ItemCollectionViewController
         self.itemCollectionViewController!.dataProvder = self;
         
-        self.windowShopperViewController = storyboard?.instantiateViewControllerWithIdentifier("WindowShopperViewController") as? WindowShopperViewController
-        self.windowShopperViewController!.dataProvder = self;
-        
+        self.addChildViewController(self.windowShopperViewController!)
         self.addChildViewController(self.itemListTableViewController!)
+        self.itemListTableViewController!.view.hidden = true
         self.addChildViewController(self.itemCollectionViewController!)
         self.itemCollectionViewController!.view.hidden = true
-        self.addChildViewController(self.windowShopperViewController!)
-        self.windowShopperViewController!.view.hidden = true
+        
     }
     
     override func addChildViewController(childController: UIViewController) {
@@ -68,9 +69,9 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     
     override func updateViewConstraints() {
         if (self.hasAddedConstraints == false) {
+            self.addConstraintsToViewController(self.windowShopperViewController!);
             self.addConstraintsToViewController(self.itemListTableViewController!);
             self.addConstraintsToViewController(self.itemCollectionViewController!);
-            self.addConstraintsToViewController(self.windowShopperViewController!);
             
             self.hasAddedConstraints = true;
         }

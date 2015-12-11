@@ -20,13 +20,13 @@ class ColorProvider {
     
     private static var blueComponent : CGFloat = ColorProvider.randomColorGenerator() / 1.25
     
-    private static var indicesPerCycle : Double = Double(arc4random() % 5) + 20.0
+    static var indicesPerCycle : Double = Double(arc4random() % 5) + 20.0
     private static var indexOffset : Int = Int(arc4random() % 10)
     
-    static func colorForItemPosition(itemPosition : Int) -> UIColor {
+    static func colorForItemPosition(itemPosition : Double) -> UIColor {
         
         var red: CGFloat = 0
-        var green: CGFloat = CGFloat(abs(sin(Double(itemPosition + ColorProvider.indexOffset) * M_PI / ColorProvider.indicesPerCycle))) / 1.75
+        var green: CGFloat = CGFloat(abs(sin((itemPosition + Double(ColorProvider.indexOffset)) * M_PI / ColorProvider.indicesPerCycle))) / 1.75
         var blue: CGFloat = blueComponent
         
         // Mix the color
