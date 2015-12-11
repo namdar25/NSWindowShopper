@@ -50,6 +50,7 @@ class ItemListTableViewCell : UITableViewCell {
             }
         }
     }
+
     
     private func setDescriptionText(descriptionText : String?) {
         // Really boot hack to fix textview bug

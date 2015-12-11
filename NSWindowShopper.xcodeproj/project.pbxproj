@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1481F5951C1A56890044CD13 /* SearchSettingsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1481F5941C1A56890044CD13 /* SearchSettingsDTO.swift */; settings = {ASSET_TAGS = (); }; };
+		1481F5971C1A890C0044CD13 /* CategorySelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1481F5961C1A890B0044CD13 /* CategorySelectorViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		304E1A031C15328E00EF0A7A /* CosmosDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304E1A021C15328E00EF0A7A /* CosmosDistrib.swift */; };
 		4E30A63D1C151990001540CF /* ItemListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30A63C1C151990001540CF /* ItemListTableViewController.swift */; };
 		4E30A63F1C151E0B001540CF /* NeedsDataFromSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E30A63E1C151E0B001540CF /* NeedsDataFromSearchResults.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1481F5941C1A56890044CD13 /* SearchSettingsDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsDTO.swift; sourceTree = "<group>"; };
+		1481F5961C1A890B0044CD13 /* CategorySelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategorySelectorViewController.swift; sourceTree = "<group>"; };
 		304E1A021C15328E00EF0A7A /* CosmosDistrib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CosmosDistrib.swift; sourceTree = "<group>"; };
 		4E30A63C1C151990001540CF /* ItemListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListTableViewController.swift; sourceTree = "<group>"; };
 		4E30A63E1C151E0B001540CF /* NeedsDataFromSearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeedsDataFromSearchResults.swift; sourceTree = "<group>"; };
@@ -112,6 +116,7 @@
 				4E30A63E1C151E0B001540CF /* NeedsDataFromSearchResults.swift */,
 				4E6589431C154ECF009ADAE6 /* ImageLoader.swift */,
 				4EDCF6011C1758140073A045 /* ItemDataProvider.swift */,
+				1481F5941C1A56890044CD13 /* SearchSettingsDTO.swift */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 				9DFDE2F61C0E959F007DFE93 /* ProfileViewController.storyboard */,
 				9DFDE2FA1C0E9676007DFE93 /* SearchSettingsViewController.swift */,
 				9DFDE2FC1C0E9686007DFE93 /* SearchSettingsViewController.storyboard */,
+				1481F5961C1A890B0044CD13 /* CategorySelectorViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -264,8 +270,10 @@
 				9DFDE2F31C0E951D007DFE93 /* ItemDetailViewController.swift in Sources */,
 				9DFDE3011C0E99CD007DFE93 /* Item.swift in Sources */,
 				9DFDE2FB1C0E9676007DFE93 /* SearchSettingsViewController.swift in Sources */,
+				1481F5951C1A56890044CD13 /* SearchSettingsDTO.swift in Sources */,
 				4E6589421C154C20009ADAE6 /* ItemListTableViewCell.swift in Sources */,
 				4E30A6411C1520CE001540CF /* ItemCollectionViewController.swift in Sources */,
+				1481F5971C1A890C0044CD13 /* CategorySelectorViewController.swift in Sources */,
 				4E30A63D1C151990001540CF /* ItemListTableViewController.swift in Sources */,
 				4ED2FF6B1C1C08E600269339 /* CategoryProxy.swift in Sources */,
 				4ED2FF6D1C1C095B00269339 /* Category.swift in Sources */,
@@ -372,6 +380,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = NSWindowShopper/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = windowShopper.NSWindowShopper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -383,6 +392,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = NSWindowShopper/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = windowShopper.NSWindowShopper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
