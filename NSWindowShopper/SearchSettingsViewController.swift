@@ -18,10 +18,10 @@ class SearchSettingsViewController : UIViewController {
         self.navigationItem.setLeftBarButtonItem(resetButton, animated: false)
     }
     
-    func CancelApplyPressed() {
+    func handleCancelPressed() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    func ResetApplyPressed() {
+    func handleResetPressed() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
