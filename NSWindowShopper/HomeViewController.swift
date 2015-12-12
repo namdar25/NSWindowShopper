@@ -9,11 +9,15 @@
 import Foundation
 import UIKit
 
-class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProxyDelegate {
+class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProxyDelegate, CategoryProxyDelegate {
     
-    var itemsToDisplay : [Item]?
     var hasAddedConstraints = false
+
+    var itemsToDisplay : [Item]?
+    var categoriesToDisplay : [Category]?
+    
     var searchResultsProxy : SearchResultsProxy?
+    var categoryProxy : CategoryProxy?
     
     var windowShopperViewController : WindowShopperViewController?
     var itemListTableViewController : ItemListTableViewController?
@@ -32,6 +36,9 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         
         self.searchResultsProxy = SearchResultsProxy(delegate: self)
         loadItems();
+        
+        self.categoryProxy = CategoryProxy(delegate: self)
+        self.categoryProxy!.loadCategories();
     }
     
     func createNavigationButtons() {
@@ -131,14 +138,14 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         self.searchResultsProxy!.reloadItems()
     }
     
-    // Mark - ItemDataProvider
+    // MARK - ItemDataProvider
     
     func loadNextPage() {
         self.startLoadingAnimations()
         self.searchResultsProxy!.loadNextPage()
     }
     
-    // Mark - SearchResultsProxyDelegate
+    // MARK - SearchResultsProxyDelegate
     
     func loadedItems(items : [Item]) {
         self.itemsToDisplay = items
@@ -150,6 +157,16 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         self.itemsToDisplay = nil
         self.reloadViewControllers()
         self.stopLoadingAnimations()
+    }
+    
+    // MARK - CategoryProxyDelegate
+    
+    func loadedCategories(categories: [Category]?) {
+        self.categoriesToDisplay = categories
+    }
+    
+    func failedToLoadCategories() {
+        self.categoriesToDisplay = nil
     }
     
     // MARK - Animation

@@ -40,23 +40,21 @@ class SearchResultsProxy {
         let urlSession = NSURLSession.sharedSession();
         
         let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if (error != nil || data == nil) {
+            if (error != nil || data == nil) {
+                self.notifyDelegateOfFailure()
+            } else {
+                let parsedItemData : [Item]? = self.parseJsonData(data!);
+                if (parsedItemData == nil) {
                     self.notifyDelegateOfFailure()
                 } else {
-                    let parsedItemData : [Item]? = self.parseJsonData(data!);
-                    if (parsedItemData == nil) {
-                        self.notifyDelegateOfFailure()
+                    if (self.loadedItems == nil) {
+                        self.loadedItems = parsedItemData!
                     } else {
-                        if (self.loadedItems == nil) {
-                            self.loadedItems = parsedItemData!
-                        } else {
-                            self.loadedItems!.appendContentsOf(parsedItemData!)
-                        }
-                        self.notifyDelegateOfLoadedItems()
+                        self.loadedItems!.appendContentsOf(parsedItemData!)
                     }
+                    self.notifyDelegateOfLoadedItems()
                 }
-            })
+            }
         }
         task.resume()
     }
@@ -76,13 +74,17 @@ class SearchResultsProxy {
     
     func notifyDelegateOfFailure() {
         if(self.delegate != nil) {
-            self.delegate!.failedToLoadItems()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.delegate!.failedToLoadItems()
+            })
         }
     }
     
     func notifyDelegateOfLoadedItems() {
         if(self.delegate != nil) {
-            self.delegate!.loadedItems(self.loadedItems!)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.delegate!.loadedItems(self.loadedItems!)
+            })
         }
     }
     
