@@ -178,7 +178,7 @@ Adventure...</string>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" red="0.6560183543" green="0.3436549364" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.55264227759999995" green="0.29071613629999998" blue="0.84726355819999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="ZmZ-J4-6bm" firstAttribute="centerX" secondItem="Cmv-tF-dtR" secondAttribute="centerX" id="cMn-ZI-obc"/>
                                     <constraint firstItem="ZmZ-J4-6bm" firstAttribute="centerY" secondItem="Cmv-tF-dtR" secondAttribute="centerY" id="u2M-7d-Ys6"/>
@@ -292,7 +292,7 @@ Adventure...</string>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" red="0.65601835425917088" green="0.34365493642700301" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.55264227759999995" green="0.29071613629999998" blue="0.84726355819999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="AeL-oi-ssH" firstAttribute="centerX" secondItem="Ki0-8A-MUS" secondAttribute="centerX" id="K41-Kc-AmE"/>
                                     <constraint firstItem="AeL-oi-ssH" firstAttribute="centerY" secondItem="Ki0-8A-MUS" secondAttribute="centerY" id="lqZ-mM-g4l"/>
@@ -439,7 +439,7 @@ Adventure...</string>
                                         <constraint firstItem="taQ-1I-3gI" firstAttribute="centerX" secondItem="eCb-4A-xhZ" secondAttribute="centerX" id="mTn-b7-CqQ"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" red="0.6560183543" green="0.3436549364" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.55264227759847606" green="0.29071613634648968" blue="0.84726355820105814" alpha="1" colorSpace="calibratedRGB"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
