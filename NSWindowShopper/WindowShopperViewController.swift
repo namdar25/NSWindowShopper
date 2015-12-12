@@ -100,7 +100,7 @@ class WindowShopperViewController : UICollectionViewController, NeedsDataFromSea
             return cell
         } else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadMoreCollectionViewCell", forIndexPath: indexPath)
-            cell.layer.cornerRadius = 3.0
+            cell.layer.cornerRadius = 9.0
             cell.clipsToBounds = true
             return cell;
         }

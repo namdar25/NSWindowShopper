@@ -75,8 +75,15 @@ class ItemCollectionViewController : UICollectionViewController, NeedsDataFromSe
     // MARK - UICollectionView
     
     func collectionView(collectionView : UICollectionView,layout collectionViewLayout:UICollectionViewLayout,sizeForItemAtIndexPath indexPath:NSIndexPath) -> CGSize {
-        let imageSize = collectionView.frame.width/self.numberOfColumns - 7.5
-        return CGSizeMake(imageSize, imageSize + 80)
+        
+        if(indexPath.item  < self.items!.count) {
+            let imageSize = collectionView.frame.width/self.numberOfColumns - 7.5
+            return CGSizeMake(imageSize, imageSize + 80)
+        } else {
+            let screenWidth = collectionView.frame.width - 10
+            let imageSize = collectionView.frame.width/self.numberOfColumns - 7.5 + 80
+            return CGSizeMake(screenWidth, imageSize / 2.0)
+        }
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -94,7 +101,7 @@ class ItemCollectionViewController : UICollectionViewController, NeedsDataFromSe
             return cell
         } else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("LoadMoreCollectionViewCell", forIndexPath: indexPath)
-            cell.layer.cornerRadius = 3.0
+            cell.layer.cornerRadius = 9.0
             cell.clipsToBounds = true
             return cell;
         }

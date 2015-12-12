@@ -13,13 +13,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        
+        self.window = UIWindow()
+        self.window?.bounds = UIScreen.mainScreen().bounds;
+        self.window?.frame = UIScreen.mainScreen().bounds;
 
+        return true
+    }
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let storyboard = UIStoryboard(name: "HomeViewController", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("HomeViewController") as UIViewController
         let navigationController = UINavigationController(rootViewController: vc)
         
-        self.window = UIWindow()
         self.window!.rootViewController = navigationController
         self.window!.makeKeyAndVisible()
         
