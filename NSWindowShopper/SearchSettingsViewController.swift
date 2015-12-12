@@ -13,6 +13,7 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
 
     let searchSettingsDTO = SearchSettingsDTO()
     
+    @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var currentCategoryButton: UIButton!
     @IBOutlet weak var sortTypeSegmentConrtrol: UISegmentedControl!
     @IBOutlet weak var sortOrderSegmentControl: UISegmentedControl!
@@ -34,11 +35,14 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
         
         minimumPriceTextField.delegate = self
         maximumPriceTextField.delegate = self
+        searchTextField.delegate = self
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        let bottomOffset = CGPoint(x: 0, y: self.scrollView.contentSize.height - self.scrollView.bounds.size.height)
-        self.scrollView.setContentOffset(bottomOffset, animated: true)
+        if textField == minimumPriceTextField || textField == maximumPriceTextField {
+            let bottomOffset = CGPoint(x: 0, y: self.scrollView.contentSize.height - self.scrollView.bounds.size.height)
+            self.scrollView.setContentOffset(bottomOffset, animated: true)
+        }
     }
     
     func setDefaultValues() {
@@ -65,6 +69,7 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     func handleTap(recognizer: UITapGestureRecognizer) {
         minimumPriceTextField.resignFirstResponder()
         maximumPriceTextField.resignFirstResponder()
+        searchTextField.resignFirstResponder()
     }
     
     @IBAction func handleCurrentCategoryTapped() {
@@ -78,13 +83,7 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     @IBAction func handleSortOrderSegmentConrolValueChanged(sender: UISegmentedControl) {
     }
     
+    @IBAction func handleApplyButtonPressed(sender: UIButton) {
     
-    
-    
-    
-
-    
-    
-    
-
+    }
 }
