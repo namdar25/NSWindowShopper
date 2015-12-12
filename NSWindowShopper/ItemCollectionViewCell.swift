@@ -30,9 +30,7 @@ class ItemCollectionViewCell : UICollectionViewCell {
     
     private func firstTimeUISetupIfNeeded() {
         if (!hasConfiguredStaticUI) {
-            self.contentView.layer.cornerRadius = 6.0;
-            self.contentView.layer.borderColor = ColorProvider.darkBorderColor.CGColor
-            //self.contentView.layer.borderWidth = 2
+            self.contentView.layer.cornerRadius = 9.0;
             self.contentView.clipsToBounds = true;
             
             self.itemImageView.clipsToBounds = true;

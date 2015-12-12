@@ -32,9 +32,7 @@ class ItemListTableViewCell : UITableViewCell {
     
     private func firstTimeUISetupIfNeeded() {
         if (!hasConfiguredStaticUI) {
-            self.itemImageView.layer.cornerRadius = 3.0;
-            self.itemImageView.layer.borderColor = ColorProvider.darkBorderColor.CGColor
-            self.itemImageView.layer.borderWidth = 2
+            self.itemImageView.layer.cornerRadius = 9.0;
             self.itemImageView.clipsToBounds = true;
             
             self.itemImageView.contentMode = UIViewContentMode.ScaleAspectFill

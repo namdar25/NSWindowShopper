@@ -70,7 +70,8 @@ class ItemListTableViewController : UITableViewController, NeedsDataFromSearchRe
         if (indexPath.row < self.items!.count) {
             let cell = tableView.dequeueReusableCellWithIdentifier("ItemListTableViewCell") as! ItemListTableViewCell;
             cell.configureWithItem(self.items![indexPath.row])
-            cell.backgroundColor = ColorProvider.colorForItemPosition(Double(indexPath.row))
+            cell.backgroundColor = UIColor.whiteColor()
+            cell.contentView.backgroundColor = ColorProvider.colorForItemPosition(Double(indexPath.row))
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreTableViewCell");

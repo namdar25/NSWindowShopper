@@ -107,16 +107,19 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vhk-ez-wJL">
-                                            <rect key="frame" x="0.0" y="0.0" width="160" height="185"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="160" height="240"/>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" alpha="0.75" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient" translatesAutoresizingMaskIntoConstraints="NO" id="EVA-61-cec">
+                                            <rect key="frame" x="0.0" y="190" width="160" height="50"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O0x-ST-UEi">
-                                            <rect key="frame" x="8" y="193" width="144" height="20.5"/>
+                                            <rect key="frame" x="8" y="214.5" width="144" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tfy-Ax-ic9">
-                                            <rect key="frame" x="8" y="211" width="144" height="20.5"/>
+                                            <rect key="frame" x="8" y="192" width="144" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -126,18 +129,31 @@
                                 </view>
                                 <constraints>
                                     <constraint firstAttribute="trailingMargin" secondItem="O0x-ST-UEi" secondAttribute="trailing" id="BEy-WN-yPV"/>
+                                    <constraint firstItem="O0x-ST-UEi" firstAttribute="top" secondItem="tfy-Ax-ic9" secondAttribute="bottom" constant="2" id="E58-C3-Mk0"/>
                                     <constraint firstAttribute="leadingMargin" secondItem="O0x-ST-UEi" secondAttribute="leading" id="GYR-7d-RLC"/>
                                     <constraint firstItem="Vhk-ez-wJL" firstAttribute="top" secondItem="zmB-HO-tTo" secondAttribute="topMargin" constant="-8" id="H4W-x6-tv3"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="Vhk-ez-wJL" secondAttribute="bottom" constant="-8" id="HWg-Cy-ewH"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="O0x-ST-UEi" secondAttribute="bottom" constant="-3" id="Itg-6p-jzW"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="EVA-61-cec" secondAttribute="bottom" constant="-8" id="OVd-s7-SBD"/>
                                     <constraint firstAttribute="leadingMargin" secondItem="tfy-Ax-ic9" secondAttribute="leading" id="Okl-Ys-Fgm"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="Vhk-ez-wJL" secondAttribute="trailing" constant="-8" id="Shu-se-Aa2"/>
                                     <constraint firstAttribute="bottomMargin" secondItem="tfy-Ax-ic9" secondAttribute="bottom" id="XYK-oj-eCk"/>
                                     <constraint firstItem="Vhk-ez-wJL" firstAttribute="leading" secondItem="zmB-HO-tTo" secondAttribute="leadingMargin" constant="-8" id="Ysz-Bq-y1l"/>
                                     <constraint firstItem="tfy-Ax-ic9" firstAttribute="top" secondItem="O0x-ST-UEi" secondAttribute="bottom" constant="-2" id="dtk-xm-Gl2"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="tfy-Ax-ic9" secondAttribute="trailing" id="hUl-5F-jTo"/>
+                                    <constraint firstItem="EVA-61-cec" firstAttribute="leading" secondItem="zmB-HO-tTo" secondAttribute="leadingMargin" constant="-8" id="iJK-j3-egf"/>
                                     <constraint firstItem="O0x-ST-UEi" firstAttribute="top" secondItem="Vhk-ez-wJL" secondAttribute="bottom" constant="8" id="rwg-Mj-Ipa"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="EVA-61-cec" secondAttribute="trailing" constant="-8" id="yFJ-M6-r3J"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                 <size key="customSize" width="160" height="240"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="XYK-oj-eCk"/>
+                                        <exclude reference="dtk-xm-Gl2"/>
+                                        <exclude reference="rwg-Mj-Ipa"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outlet property="itemImageView" destination="Vhk-ez-wJL" id="tW4-YD-9EJ"/>
                                     <outlet property="priceLabel" destination="tfy-Ax-ic9" id="6QF-NW-x2b"/>
