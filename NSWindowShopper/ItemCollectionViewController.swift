@@ -22,8 +22,8 @@ class ItemCollectionViewController : UICollectionViewController, NeedsDataFromSe
         
         self.view.translatesAutoresizingMaskIntoConstraints = false;
         
-        self.collectionView?.backgroundColor = UIColor.clearColor()
-        self.collectionView?.backgroundView?.backgroundColor = UIColor.clearColor()
+        self.collectionView?.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
+        //self.collectionView?.backgroundView?.backgroundColor = UIColor.clearColor()
         self.collectionView?.contentInset = UIEdgeInsets(top: 108, left: 0, bottom: 0, right: 0)
         
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -62,6 +62,14 @@ class ItemCollectionViewController : UICollectionViewController, NeedsDataFromSe
     func reloadWithData(items: [Item]?) {
         self.items = items;
         self.collectionView?.reloadData()
+    }
+    
+    // MARK - ScrollView Delegate
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        let cellHeight = (self.collectionView?.frame.width)!/self.numberOfColumns + 90;
+        let viewPosition = (self.collectionView?.contentOffset.y)! / cellHeight;
+        self.collectionView?.backgroundColor = ColorProvider.colorForItemPosition(Double(viewPosition * 1.5) + ColorProvider.indicesPerCycle / 4.0);
     }
     
     // MARK - UICollectionView

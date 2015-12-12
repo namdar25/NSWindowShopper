@@ -32,7 +32,6 @@ class SearchResultsProxy {
     
     func loadItems() {
         let urlToLoad = NSURL(string: "https://\(self.urlToLoad())/?page=\(self.pageNumber)");
-        print(urlToLoad)
         if (urlToLoad == nil) {
             return;
         }
