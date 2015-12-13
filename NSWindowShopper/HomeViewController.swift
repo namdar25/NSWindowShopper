@@ -53,18 +53,17 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         self.windowShopperViewController = storyboard?.instantiateViewControllerWithIdentifier("WindowShopperViewController") as? WindowShopperViewController
         self.windowShopperViewController!.dataProvder = self;
         
-        self.itemListTableViewController = storyboard?.instantiateViewControllerWithIdentifier("ItemListTableViewController") as? ItemListTableViewController
-        self.itemListTableViewController!.dataProvder = self;
-        
         self.itemCollectionViewController = storyboard?.instantiateViewControllerWithIdentifier("ItemCollectionViewController") as? ItemCollectionViewController
         self.itemCollectionViewController!.dataProvder = self;
         
+        self.itemListTableViewController = storyboard?.instantiateViewControllerWithIdentifier("ItemListTableViewController") as? ItemListTableViewController
+        self.itemListTableViewController!.dataProvder = self;
+        
         self.addChildViewController(self.windowShopperViewController!)
-        self.addChildViewController(self.itemListTableViewController!)
-        self.itemListTableViewController!.view.hidden = true
         self.addChildViewController(self.itemCollectionViewController!)
         self.itemCollectionViewController!.view.hidden = true
-        
+        self.addChildViewController(self.itemListTableViewController!)
+        self.itemListTableViewController!.view.hidden = true
     }
     
     override func addChildViewController(childController: UIViewController) {
@@ -77,8 +76,8 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     override func updateViewConstraints() {
         if (self.hasAddedConstraints == false) {
             self.addConstraintsToViewController(self.windowShopperViewController!);
-            self.addConstraintsToViewController(self.itemListTableViewController!);
             self.addConstraintsToViewController(self.itemCollectionViewController!);
+            self.addConstraintsToViewController(self.itemListTableViewController!);
             
             self.hasAddedConstraints = true;
         }
