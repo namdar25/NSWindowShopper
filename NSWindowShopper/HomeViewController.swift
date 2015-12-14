@@ -118,6 +118,8 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         let vc = storyboard.instantiateViewControllerWithIdentifier("SearchSettingsViewController") as! SearchSettingsViewController
         vc.delegate = self
         let navController = UINavigationController(rootViewController: vc);
+        
+        navController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         self.presentViewController(navController, animated: true, completion: nil)
     }
     

@@ -13,6 +13,19 @@ class CategorySelectorViewController : UIViewController {
 
     var lastSelectedIndex = 0
     
+    @IBOutlet weak var selectCategoryButton: UIButton!
+    
+    override func viewDidLoad() {
+        self.selectCategoryButton.layer.cornerRadius = 9.0
+        
+        super.viewDidLoad()
+    }
+    
+    func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let string = SearchSettingsViewController.searchSettingsDTO.availableCategories![row].name
+        return NSAttributedString(string: string!, attributes: [NSForegroundColorAttributeName:UIColor.whiteColor()])
+    }
+    
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -22,10 +35,6 @@ class CategorySelectorViewController : UIViewController {
             return SearchSettingsViewController.searchSettingsDTO.availableCategories!.count
         }
         return 0
-    }
-
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-        return SearchSettingsViewController.searchSettingsDTO.availableCategories![row].name
     }
 
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

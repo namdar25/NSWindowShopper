@@ -25,6 +25,7 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     @IBOutlet weak var sortOrderSegmentControl: UISegmentedControl!
     @IBOutlet weak var distanceInMilesSlider: UISlider!
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var applyButton: UIButton!
 
     override func viewWillAppear(animated: Bool) {
         setCategoryButtonTitle()
@@ -41,7 +42,10 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
         let recognizer = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         self.view.addGestureRecognizer(recognizer)
         
-        setValues(SearchSettingsViewController.searchSettingsDTO)
+        self.setValues(SearchSettingsViewController.searchSettingsDTO)
+        
+        self.currentCategoryButton.layer.cornerRadius = 9.0
+        self.applyButton.layer.cornerRadius = 9.0
         
         self.searchTextField.delegate = self
         super.viewDidLoad()
