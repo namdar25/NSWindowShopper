@@ -38,7 +38,6 @@ class SearchResultsProxy {
         if (self.lastSearchSettingsDTO != nil) {
             self.appendKeyphraseParameterToString(mutableString)
             self.appendCategoryParameterToString(mutableString)
-            self.appendPriceRangeParameterToString(mutableString)
             self.appendSortParameterToString(mutableString)
             self.appendDistanceRadiusToString(mutableString)
         }
@@ -79,18 +78,6 @@ class SearchResultsProxy {
         
         let id : Int = (self.lastSearchSettingsDTO?.selectedCategory!.id)!;
         mutableString.appendFormat("%@", "&cid=\(id)");
-    }
-    
-    private func appendPriceRangeParameterToString(mutableString : NSMutableString) {
-        if (self.lastSearchSettingsDTO?.priceMin != nil) {
-            let min = Int((self.lastSearchSettingsDTO?.priceMin)!)
-            mutableString.appendFormat("%@", "&price_min=\(min)");
-        }
-        
-        if (self.lastSearchSettingsDTO?.priceMax != nil) {
-            let max = Int((self.lastSearchSettingsDTO?.priceMax)!)
-            mutableString.appendFormat("%@", "&price_max=\(max)");
-        }
     }
     
     private func appendSortParameterToString(mutableString : NSMutableString) {

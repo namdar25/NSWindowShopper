@@ -37,15 +37,16 @@
                                                     <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="K3X-U4-tOE">
                                                         <rect key="frame" x="40" y="48" width="248" height="29"/>
                                                         <segments>
-                                                            <segment title="Price"/>
                                                             <segment title="Distance"/>
+                                                            <segment title="Price"/>
+                                                            <segment title="Newest"/>
                                                         </segments>
                                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
                                                             <action selector="handleSortTypeSegmentConrolValueChanged:" destination="Xbp-O1-NT4" eventType="valueChanged" id="DZO-Mm-eUW"/>
                                                         </connections>
                                                     </segmentedControl>
-                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="FLd-Uh-OP6">
+                                                    <segmentedControl opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="FLd-Uh-OP6">
                                                         <rect key="frame" x="40" y="84" width="248" height="29"/>
                                                         <segments>
                                                             <segment title="Ascending"/>
@@ -350,6 +351,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Ksd-CX-Cmx"/>
+                                    </mask>
+                                </variation>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

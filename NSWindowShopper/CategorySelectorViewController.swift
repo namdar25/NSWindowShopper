@@ -9,23 +9,23 @@
 import Foundation
 import UIKit
 
-class CategorySelectorViewController : UIViewController{
+class CategorySelectorViewController : UIViewController {
 
-    var searchSettingsDTO : SearchSettingsDTO? = nil
+   
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
 
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if (searchSettingsDTO!.availableCategories != nil) {
-            return searchSettingsDTO!.availableCategories!.count
+        if (SearchSettingsViewController.searchSettingsDTO.availableCategories != nil) {
+            return SearchSettingsViewController.searchSettingsDTO.availableCategories!.count
         }
         return 0
     }
 
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-        return searchSettingsDTO!.availableCategories![row].name
+        return SearchSettingsViewController.searchSettingsDTO.availableCategories![row].name
     }
 
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

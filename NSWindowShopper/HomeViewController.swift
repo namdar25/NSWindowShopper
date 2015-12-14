@@ -174,6 +174,7 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     
     func loadedCategories(categories: [Category]?) {
         self.categoriesToDisplay = categories
+        SearchSettingsViewController.searchSettingsDTO.availableCategories = categories!
     }
     
     func failedToLoadCategories() {

@@ -101,7 +101,7 @@ class CategoryProxy {
         let category = Category()
         category.id = categoryDictionary["id"] as? Int
         category.name = categoryDictionary["name"] as? String
-        return Category()
+        return category
     }
     
     // MARK - Source

@@ -8,15 +8,15 @@
 
 import Foundation
 
-enum SortType{
-    case Price
-    case Newest
-    case Distance
+enum SortType : Int{
+    case Distance = 0
+    case Price = 1
+    case Newest = 2
 }
 
-enum SortOrder{
-    case Ascending
-    case Descending
+enum SortOrder : Int{
+    case Ascending = 0
+    case Descending = 1
 }
 
 class SearchSettingsDTO {
@@ -28,9 +28,6 @@ class SearchSettingsDTO {
     
     var sortType : SortType?
     var sortOrder : SortOrder?
-    
-    var priceMin : Double?
-    var priceMax : Double?
     
     var distanceInMiles : Int? = 30
 }
