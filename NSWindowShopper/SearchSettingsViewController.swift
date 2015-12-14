@@ -19,6 +19,7 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     @IBOutlet weak var sortOrderSegmentControl: UISegmentedControl!
     @IBOutlet weak var distanceInMilesSlider: UISlider!
     @IBOutlet weak var scrollView: UIScrollView!
+
     
     override func viewDidLoad() {
         let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Done, target: self, action: Selector("handleCancelPressed"))

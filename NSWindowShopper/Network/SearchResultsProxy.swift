@@ -21,6 +21,7 @@ class SearchResultsProxy {
     private weak var delegate : SearchResultsProxyDelegate?
     private var loadedItems : [Item]?
     private var pageNumber : Int = 1
+    private var lastSearchSettingsDTO : SearchSettingsDTO?
     
     // MARK - Lifecycle
     
@@ -30,70 +31,161 @@ class SearchResultsProxy {
     
     // MARK - Network Interface
     
-    func loadItems() {
-        let urlToLoad = NSURL(string: "https://\(self.urlToLoad())/?page=\(self.pageNumber)");
+    func loadItemsWithSearchSettingsDTO(searchSettingsDTO : SearchSettingsDTO?) {
+        self.lastSearchSettingsDTO = searchSettingsDTO;
+        
+        let mutableString = NSMutableString(format: "%@", "https://\(self.urlToLoad())/?page=\(self.pageNumber)");
+        if (self.lastSearchSettingsDTO != nil) {
+            self.appendKeyphraseParameterToString(mutableString)
+            self.appendCategoryParameterToString(mutableString)
+            self.appendPriceRangeParameterToString(mutableString)
+            self.appendSortParameterToString(mutableString)
+            self.appendDistanceRadiusToString(mutableString)
+        }
+
+        let urlToLoad = NSURL(string: mutableString as String);
         if (urlToLoad == nil) {
             return;
         }
         
-        let request = NSURLRequest(URL: urlToLoad!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60);
-        let urlSession = NSURLSession.sharedSession();
-        
-        let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error != nil || data == nil) {
-                self.notifyDelegateOfFailure()
-            } else {
-                let parsedItemData : [Item]? = self.parseJsonData(data!);
-                if (parsedItemData == nil) {
-                    self.notifyDelegateOfFailure()
-                } else {
-                    if (self.loadedItems == nil) {
-                        self.loadedItems = parsedItemData!
-                    } else {
-                        self.loadedItems!.appendContentsOf(parsedItemData!)
-                    }
-                    self.notifyDelegateOfLoadedItems()
-                }
-            }
-        }
-        task.resume()
+        self.loadItemsWithURL(urlToLoad!)
     }
     
     func loadNextPage() {
         self.pageNumber++
-        self.loadItems()
+        self.loadItemsWithSearchSettingsDTO(self.lastSearchSettingsDTO)
     }
     
     func reloadItems() {
         self.loadedItems = nil
         self.pageNumber = 1
-        self.loadItems()
+        self.loadItemsWithSearchSettingsDTO(self.lastSearchSettingsDTO)
+    }
+    
+    // MARK - Sort/Filter Configuration
+    
+    private func appendKeyphraseParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.keyphrase == nil) {
+            return;
+        }
+        
+        mutableString.appendFormat("%@", "&q=\((self.lastSearchSettingsDTO?.keyphrase)!)");
+    }
+    
+    private func appendCategoryParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.selectedCategory == nil) {
+            return;
+        }
+        
+        let id : Int = (self.lastSearchSettingsDTO?.selectedCategory!.id)!;
+        mutableString.appendFormat("%@", "&cid=\(id)");
+    }
+    
+    private func appendPriceRangeParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.priceMin != nil) {
+            let min = Int((self.lastSearchSettingsDTO?.priceMin)!)
+            mutableString.appendFormat("%@", "&price_min=\(min)");
+        }
+        
+        if (self.lastSearchSettingsDTO?.priceMax != nil) {
+            let max = Int((self.lastSearchSettingsDTO?.priceMax)!)
+            mutableString.appendFormat("%@", "&price_max=\(max)");
+        }
+    }
+    
+    private func appendSortParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.sortType != nil) {
+            switch (self.lastSearchSettingsDTO?.sortType)! {
+            case SortType.Price:
+                self.appendPriceSortParameterToString(mutableString);
+                break;
+            case SortType.Distance:
+                mutableString.appendFormat("%@", "&sort=distance");
+                break;
+            case SortType.Newest:
+                mutableString.appendFormat("%@", "&sort=-posted");
+                break;
+            }
+        }
+    }
+    
+    private func appendPriceSortParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.sortOrder != nil) {
+            var orderString = ""
+            if (self.lastSearchSettingsDTO?.sortOrder == SortOrder.Descending) {
+                orderString = "-"
+            }
+            
+            mutableString.appendFormat("&sort=%@price", orderString)
+        }
+    }
+    
+    private func appendDistanceRadiusToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.distanceInMiles == nil) {
+            return;
+        }
+        let roundedDistance = ((self.lastSearchSettingsDTO?.distanceInMiles)!/10)*10
+        mutableString.appendFormat("%@", "&radius=\(roundedDistance)")
     }
     
     // MARK - Delegate Interface
     
-    func notifyDelegateOfFailure() {
+    private func notifyDelegateOfFailure() {
         if(self.delegate != nil) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.delegate!.failedToLoadItems()
+                self.delegate!.failedToLoadItems();
             })
         }
     }
     
-    func notifyDelegateOfLoadedItems() {
+    private func notifyDelegateOfLoadedItems() {
         if(self.delegate != nil) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.delegate!.loadedItems(self.loadedItems!)
+                self.delegate!.loadedItems(self.loadedItems!);
             })
         }
     }
     
-    // Mark - JSON Parsing
+    // MARK - Private Networking
     
-    func parseJsonData(jsonData : NSData) -> [Item]? {
+    private func loadItemsWithURL(urlToLoad : NSURL) {
+        let request = NSURLRequest(URL: urlToLoad, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60);
+        let urlSession = NSURLSession.sharedSession();
+        
+        let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error != nil || data == nil) {
+                self.notifyDelegateOfFailure();
+            } else {
+                let parsedItemData : [Item]? = self.parseJsonData(data!);
+                if (parsedItemData == nil) {
+                    self.notifyDelegateOfFailure();
+                } else {
+                    if (self.loadedItems == nil) {
+                        self.loadedItems = parsedItemData!;
+                    } else {
+                        self.loadedItems!.appendContentsOf(parsedItemData!);
+                    }
+                    self.notifyDelegateOfLoadedItems();
+                }
+            }
+        }
+        task.resume();
+    }
+    
+    // MARK - JSON Parsing
+    
+    private func parseJsonData(jsonData : NSData) -> [Item]? {
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(jsonData, options:NSJSONReadingOptions.AllowFragments)
+            
+            if (json["data"] == nil) {
+                return nil
+            }
             let dataJsonDictionary = json["data"] as! NSDictionary
+            
+            if (dataJsonDictionary["items"] == nil) {
+                return nil;
+            }
             let itemsJsonArray : [NSDictionary] = dataJsonDictionary["items"] as! [NSDictionary];
             
             return self.parseItems(itemsJsonArray);
@@ -102,7 +194,7 @@ class SearchResultsProxy {
         }
     }
     
-    func parseItems(jsonArray: NSArray) -> [Item]? {
+    private func parseItems(jsonArray: NSArray) -> [Item]? {
         var itemsToReturn : [Item] = [];
         
         for itemData in jsonArray {
@@ -114,7 +206,7 @@ class SearchResultsProxy {
         return itemsToReturn;
     }
     
-    func itemForItemDictionary(itemDictionary : NSDictionary) -> Item {
+    private func itemForItemDictionary(itemDictionary : NSDictionary) -> Item {
         let item = Item();
         item.name = itemDictionary["title"] as! String?;
         item.description = itemDictionary["description"] as! String?;
@@ -135,7 +227,7 @@ class SearchResultsProxy {
         return item;
     }
     
-    func profileForOwnerDictionary(ownerDictionary: NSDictionary) -> Profile {
+    private func profileForOwnerDictionary(ownerDictionary: NSDictionary) -> Profile {
         let profile = Profile();
 
         profile.displayName = ownerDictionary["first_name"] as! String?;
@@ -151,7 +243,7 @@ class SearchResultsProxy {
         return profile;
     }
     
-    func ratingScoreForRatingDictionary(ratingDictionary : NSDictionary) -> NSNumber {
+    private func ratingScoreForRatingDictionary(ratingDictionary : NSDictionary) -> NSNumber {
         let ratingAverage = ratingDictionary["average"];
         if (ratingAverage == nil || ratingAverage!.isKindOfClass(NSNull)){
             return 0
@@ -167,20 +259,20 @@ class SearchResultsProxy {
     
     // MARK - Helper
     
-    func numberForString(string : String) -> NSNumber {
+    private func numberForString(string : String) -> NSNumber {
         let numberFormatter = NSNumberFormatter();
         numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
         return numberFormatter.numberFromString(string)!
     }
     
-    func dateForString(string : String) -> NSDate {
+    private func dateForString(string : String) -> NSDate {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         return dateFormatter.dateFromString(string)!
     }
 
     // MARK - Source
-    func urlToLoad() -> String {
+    private func urlToLoad() -> String {
         let sourceString : NSString = obfuscatedURLString();
         let modifiedString = NSMutableString();
         for var index = 0; index < sourceString.length; index++ {
@@ -191,7 +283,7 @@ class SearchResultsProxy {
         return modifiedString as String;
     }
     
-    func obfuscatedURLString() -> NSString {
+    private func obfuscatedURLString() -> NSString {
         return "bqj/pggfsvq.tuh/dpn0bqj0w30jufnt"
     }
     

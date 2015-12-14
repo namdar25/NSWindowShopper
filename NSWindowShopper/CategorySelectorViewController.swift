@@ -14,23 +14,25 @@ class CategorySelectorViewController : UIViewController{
     var searchSettingsDTO : SearchSettingsDTO? = nil
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-    return 1
+        return 1
     }
 
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-    return searchSettingsDTO!.categoryType.count
+        if (searchSettingsDTO!.availableCategories != nil) {
+            return searchSettingsDTO!.availableCategories!.count
+        }
+        return 0
     }
 
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-    return searchSettingsDTO!.categoryType[row].description
+        return searchSettingsDTO!.availableCategories![row].name
     }
 
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
-    {
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
     
     }
 
     @IBAction func handleSelectCategoryButtonPushed(sender: UIButton) {
-    self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }

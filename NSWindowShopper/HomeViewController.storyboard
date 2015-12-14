@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--NSWindowShopper-->
+        <!--Home-->
         <scene sceneID="dW9-qH-tmk">
             <objects>
-                <viewController storyboardIdentifier="HomeViewController" title="NSWindowShopper" id="KvN-R2-HKv" customClass="HomeViewController" customModule="NSWindowShopper" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" title="Home" id="KvN-R2-HKv" customClass="HomeViewController" customModule="NSWindowShopper" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lA9-PY-XvB"/>
                         <viewControllerLayoutGuide type="bottom" id="sMd-4b-2tD"/>
@@ -28,8 +28,8 @@
                                             <rect key="frame" x="8" y="8" width="584" height="29"/>
                                             <segments>
                                                 <segment title="Window"/>
-                                                <segment title="List"/>
-                                                <segment title="Waterfall"/>
+                                                <segment title="Cascade"/>
+                                                <segment title="Flow"/>
                                             </segments>
                                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
@@ -168,10 +168,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZmZ-J4-6bm">
-                                            <rect key="frame" x="9.5" y="63.5" width="142.5" height="113.5"/>
+                                            <rect key="frame" x="3.5" y="63.5" width="154.5" height="113.5"/>
                                             <string key="text">Continue The
 Adventure...</string>
-                                            <fontDescription key="fontDescription" name="SnellRoundhand" family="Snell Roundhand" pointSize="30"/>
+                                            <fontDescription key="fontDescription" name="SnellRoundhand-Bold" family="Snell Roundhand" pointSize="30"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -281,11 +281,11 @@ Adventure...</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AeL-oi-ssH">
-                                            <rect key="frame" x="-5.5" y="52.5" width="171.5" height="137"/>
+                                            <rect key="frame" x="3" y="63.5" width="154.5" height="113.5"/>
                                             <string key="text">Continue
 The
 Adventure...</string>
-                                            <fontDescription key="fontDescription" name="SnellRoundhand" family="Snell Roundhand" pointSize="36"/>
+                                            <fontDescription key="fontDescription" name="SnellRoundhand-Bold" family="Snell Roundhand" pointSize="30"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -428,8 +428,8 @@ Adventure...</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Continue The Adventure..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="taQ-1I-3gI">
-                                            <rect key="frame" x="159" y="4" width="282.5" height="35.5"/>
-                                            <fontDescription key="fontDescription" name="SnellRoundhand" family="Snell Roundhand" pointSize="28"/>
+                                            <rect key="frame" x="136.5" y="3" width="327.5" height="38"/>
+                                            <fontDescription key="fontDescription" name="SnellRoundhand-Bold" family="Snell Roundhand" pointSize="30"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>

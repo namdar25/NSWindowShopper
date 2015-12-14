@@ -85,6 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E2FA32F1C1E37B50049685C /* ThirdPartyDependency */ = {
+			isa = PBXGroup;
+			children = (
+				304E1A021C15328E00EF0A7A /* CosmosDistrib.swift */,
+			);
+			name = ThirdPartyDependency;
+			sourceTree = "<group>";
+		};
 		4E30A63B1C151672001540CF /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +156,7 @@
 				4E83F5B91C110FF200060CEC /* Network */,
 				9DFDE2FF1C0E99BC007DFE93 /* Model */,
 				9DFDE2FE1C0E99B1007DFE93 /* Views */,
+				4E2FA32F1C1E37B50049685C /* ThirdPartyDependency */,
 			);
 			path = NSWindowShopper;
 			sourceTree = "<group>";
@@ -171,9 +180,9 @@
 		9DFDE2FF1C0E99BC007DFE93 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1481F5941C1A56890044CD13 /* SearchSettingsDTO.swift */,
 				9DFDE3001C0E99CD007DFE93 /* Item.swift */,
 				9DFDE3021C0E99E0007DFE93 /* Profile.swift */,
-				304E1A021C15328E00EF0A7A /* CosmosDistrib.swift */,
 				4ED2FF6C1C1C095B00269339 /* Category.swift */,
 			);
 			name = Model;
