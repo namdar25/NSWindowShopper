@@ -18,22 +18,9 @@ enum SortOrder{
     case Descending
 }
 
-enum CategoryType : String{
-    case Blah = "Blah"
-    case Bluh = "Bluh"
-    case Bleh = "Bleh"
-    case All = "All"
-    
-    var description : String {
-        get {
-            return self.rawValue
-        }
-    }
-}
-
 class SearchSettingsDTO {
-    let categoryType = [CategoryType.Blah,CategoryType.Bluh,CategoryType.Bleh,CategoryType.All]
-    var currentCategory : String? = "All"
+    var availableCategories : [Category]?
+    var selectedCategory : Category?
     var sortType : SortType? = SortType.Price
     var sortOrder : SortOrder? = SortOrder.Ascending
     var priceMin : Double? = 0.0

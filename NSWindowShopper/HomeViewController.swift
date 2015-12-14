@@ -126,7 +126,16 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         self.startLoadingAnimations()
         
         self.itemsToDisplay = nil;
-        self.searchResultsProxy!.loadItems()
+        self.searchResultsProxy!.loadItemsWithSearchSettingsDTO(tempTestSearchSettings())
+    }
+    
+    private func tempTestSearchSettings() -> SearchSettingsDTO {
+        let settings = SearchSettingsDTO()
+        let category = Category()
+        category.id = 5
+        settings.selectedCategory = category
+        
+        return settings;
     }
     
     func reloadItems() {

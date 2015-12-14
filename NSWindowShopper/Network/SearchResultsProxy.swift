@@ -21,6 +21,7 @@ class SearchResultsProxy {
     private weak var delegate : SearchResultsProxyDelegate?
     private var loadedItems : [Item]?
     private var pageNumber : Int = 1
+    private var lastSearchSettingsDTO : SearchSettingsDTO?
     
     // MARK - Lifecycle
     
@@ -30,13 +31,58 @@ class SearchResultsProxy {
     
     // MARK - Network Interface
     
-    func loadItems() {
-        let urlToLoad = NSURL(string: "https://\(self.urlToLoad())/?page=\(self.pageNumber)");
+    func loadItemsWithSearchSettingsDTO(searchSettingsDTO : SearchSettingsDTO?) {
+        self.lastSearchSettingsDTO = searchSettingsDTO;
+        
+        let mutableString = NSMutableString(format: "%@", "https://\(self.urlToLoad())/?page=\(self.pageNumber)");
+        if (searchSettingsDTO != nil) {
+            if (searchSettingsDTO?.selectedCategory != nil) {
+                let id : Int = (searchSettingsDTO?.selectedCategory!.id)!
+                mutableString.appendFormat("%@", "&cid=\(id)")
+            }
+        }
+        print(mutableString)
+        let urlToLoad = NSURL(string: mutableString as String);
         if (urlToLoad == nil) {
             return;
         }
         
-        let request = NSURLRequest(URL: urlToLoad!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60);
+        self.loadItemsWithURL(urlToLoad!)
+    }
+    
+    func loadNextPage() {
+        self.pageNumber++
+        self.loadItemsWithSearchSettingsDTO(self.lastSearchSettingsDTO)
+    }
+    
+    func reloadItems() {
+        self.loadedItems = nil
+        self.pageNumber = 1
+        self.loadItemsWithSearchSettingsDTO(self.lastSearchSettingsDTO)
+    }
+    
+    // MARK - Delegate Interface
+    
+    private func notifyDelegateOfFailure() {
+        if(self.delegate != nil) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.delegate!.failedToLoadItems()
+            })
+        }
+    }
+    
+    private func notifyDelegateOfLoadedItems() {
+        if(self.delegate != nil) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.delegate!.loadedItems(self.loadedItems!)
+            })
+        }
+    }
+    
+    // MARK - Private Networking
+    
+    private func loadItemsWithURL(urlToLoad : NSURL) {
+        let request = NSURLRequest(URL: urlToLoad, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60);
         let urlSession = NSURLSession.sharedSession();
         
         let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
@@ -59,41 +105,20 @@ class SearchResultsProxy {
         task.resume()
     }
     
-    func loadNextPage() {
-        self.pageNumber++
-        self.loadItems()
-    }
+    // MARK - JSON Parsing
     
-    func reloadItems() {
-        self.loadedItems = nil
-        self.pageNumber = 1
-        self.loadItems()
-    }
-    
-    // MARK - Delegate Interface
-    
-    func notifyDelegateOfFailure() {
-        if(self.delegate != nil) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.delegate!.failedToLoadItems()
-            })
-        }
-    }
-    
-    func notifyDelegateOfLoadedItems() {
-        if(self.delegate != nil) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.delegate!.loadedItems(self.loadedItems!)
-            })
-        }
-    }
-    
-    // Mark - JSON Parsing
-    
-    func parseJsonData(jsonData : NSData) -> [Item]? {
+    private func parseJsonData(jsonData : NSData) -> [Item]? {
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(jsonData, options:NSJSONReadingOptions.AllowFragments)
+            
+            if (json["data"] == nil) {
+                return nil
+            }
             let dataJsonDictionary = json["data"] as! NSDictionary
+            
+            if (dataJsonDictionary["items"] == nil) {
+                return nil;
+            }
             let itemsJsonArray : [NSDictionary] = dataJsonDictionary["items"] as! [NSDictionary];
             
             return self.parseItems(itemsJsonArray);
@@ -102,7 +127,7 @@ class SearchResultsProxy {
         }
     }
     
-    func parseItems(jsonArray: NSArray) -> [Item]? {
+    private func parseItems(jsonArray: NSArray) -> [Item]? {
         var itemsToReturn : [Item] = [];
         
         for itemData in jsonArray {
@@ -114,7 +139,7 @@ class SearchResultsProxy {
         return itemsToReturn;
     }
     
-    func itemForItemDictionary(itemDictionary : NSDictionary) -> Item {
+    private func itemForItemDictionary(itemDictionary : NSDictionary) -> Item {
         let item = Item();
         item.name = itemDictionary["title"] as! String?;
         item.description = itemDictionary["description"] as! String?;
@@ -135,7 +160,7 @@ class SearchResultsProxy {
         return item;
     }
     
-    func profileForOwnerDictionary(ownerDictionary: NSDictionary) -> Profile {
+    private func profileForOwnerDictionary(ownerDictionary: NSDictionary) -> Profile {
         let profile = Profile();
 
         profile.displayName = ownerDictionary["first_name"] as! String?;
@@ -151,7 +176,7 @@ class SearchResultsProxy {
         return profile;
     }
     
-    func ratingScoreForRatingDictionary(ratingDictionary : NSDictionary) -> NSNumber {
+    private func ratingScoreForRatingDictionary(ratingDictionary : NSDictionary) -> NSNumber {
         let ratingAverage = ratingDictionary["average"];
         if (ratingAverage == nil || ratingAverage!.isKindOfClass(NSNull)){
             return 0
@@ -167,20 +192,20 @@ class SearchResultsProxy {
     
     // MARK - Helper
     
-    func numberForString(string : String) -> NSNumber {
+    private func numberForString(string : String) -> NSNumber {
         let numberFormatter = NSNumberFormatter();
         numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
         return numberFormatter.numberFromString(string)!
     }
     
-    func dateForString(string : String) -> NSDate {
+    private func dateForString(string : String) -> NSDate {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         return dateFormatter.dateFromString(string)!
     }
 
     // MARK - Source
-    func urlToLoad() -> String {
+    private func urlToLoad() -> String {
         let sourceString : NSString = obfuscatedURLString();
         let modifiedString = NSMutableString();
         for var index = 0; index < sourceString.length; index++ {
@@ -191,7 +216,7 @@ class SearchResultsProxy {
         return modifiedString as String;
     }
     
-    func obfuscatedURLString() -> NSString {
+    private func obfuscatedURLString() -> NSString {
         return "bqj/pggfsvq.tuh/dpn0bqj0w30jufnt"
     }
     
