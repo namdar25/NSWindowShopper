@@ -44,8 +44,28 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
         
         self.setValues(SearchSettingsViewController.searchSettingsDTO)
         
+        self.searchTextField.layer.borderWidth = 1
+        self.searchTextField.layer.cornerRadius = 6.0
+        self.searchTextField.layer.borderColor = UIColor(white: 0.85, alpha: 1).CGColor
         self.currentCategoryButton.layer.cornerRadius = 9.0
         self.applyButton.layer.cornerRadius = 9.0
+        
+        self.searchTextField.layer.shadowColor = UIColor.blackColor().CGColor
+        self.searchTextField.layer.shadowOffset = CGSizeZero
+        self.searchTextField.layer.shadowOpacity = 1
+        self.searchTextField.layer.shadowRadius = 15
+        
+        self.sortTypeSegmentConrtrol.layer.shadowColor = UIColor.blackColor().CGColor
+        self.sortTypeSegmentConrtrol.layer.shadowOffset = CGSizeZero
+        self.sortTypeSegmentConrtrol.layer.shadowOpacity = 0.7
+        self.sortTypeSegmentConrtrol.layer.shadowRadius = 6
+        
+        self.sortOrderSegmentControl.layer.shadowColor = UIColor.blackColor().CGColor
+        self.sortOrderSegmentControl.layer.shadowOffset = CGSizeZero
+        self.sortOrderSegmentControl.layer.shadowOpacity = 0.7
+        self.sortOrderSegmentControl.layer.shadowRadius = 6
+        
+        
         
         self.searchTextField.delegate = self
         super.viewDidLoad()
