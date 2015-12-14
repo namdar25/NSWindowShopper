@@ -11,7 +11,7 @@ import UIKit
 
 class CategorySelectorViewController : UIViewController {
 
-   
+    var lastSelectedIndex = 0
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
@@ -29,10 +29,12 @@ class CategorySelectorViewController : UIViewController {
     }
 
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-    
+        lastSelectedIndex = row
     }
 
     @IBAction func handleSelectCategoryButtonPushed(sender: UIButton) {
+        let dto = SearchSettingsViewController.searchSettingsDTO
+        dto.selectedCategory = dto.availableCategories![lastSelectedIndex]
         self.navigationController?.popViewControllerAnimated(true)
     }
 }

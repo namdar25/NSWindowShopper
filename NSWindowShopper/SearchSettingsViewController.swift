@@ -9,9 +9,15 @@
 import Foundation
 import UIKit
 
+protocol SearchSettingsDelegate : AnyObject {
+    func loadItems()
+}
+
 class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
 
     static var searchSettingsDTO = SearchSettingsDTO()
+    
+    weak var delegate : SearchSettingsDelegate?
     
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var currentCategoryButton: UIButton!
@@ -20,6 +26,11 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     @IBOutlet weak var distanceInMilesSlider: UISlider!
     @IBOutlet weak var scrollView: UIScrollView!
 
+    override func viewWillAppear(animated: Bool) {
+        setCategoryButtonTitle()
+        
+        super.viewWillAppear(animated)
+    }
     
     override func viewDidLoad() {
         let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Done, target: self, action: Selector("handleCancelPressed"))
@@ -27,42 +38,41 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
         self.navigationItem.setRightBarButtonItem(cancelButton, animated: false)
         self.navigationItem.setLeftBarButtonItem(resetButton, animated: false)
         
-        self.setValues(SearchSettingsViewController.searchSettingsDTO)
         let recognizer = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         self.view.addGestureRecognizer(recognizer)
-
+        
+        setValues(SearchSettingsViewController.searchSettingsDTO)
+        
         self.searchTextField.delegate = self
+        super.viewDidLoad()
     }
     
     func setValues(dto: SearchSettingsDTO) {
         self.searchTextField.text = dto.keyphrase
-        if dto.selectedCategory == nil {
-            self.currentCategoryButton.setTitle("All", forState: UIControlState.Normal)
-        } else {
-            self.currentCategoryButton.setTitle(dto.selectedCategory!.name, forState: UIControlState.Normal)
-        }
+        setCategoryButtonTitle()
         if dto.sortType == nil {
             self.sortTypeSegmentConrtrol.selectedSegmentIndex = 0
         } else {
             self.sortTypeSegmentConrtrol.selectedSegmentIndex = dto.sortType!.rawValue
         }
         if dto.sortOrder == nil {
-            self.sortTypeSegmentConrtrol.selectedSegmentIndex = 0
+            self.sortOrderSegmentControl.selectedSegmentIndex = 0
         } else {
-            self.sortTypeSegmentConrtrol.selectedSegmentIndex = dto.sortOrder!.rawValue
+            self.sortOrderSegmentControl.selectedSegmentIndex = dto.sortOrder!.rawValue
         }
         if dto.distanceInMiles == nil {
             self.distanceInMilesSlider.setValue(30, animated: true)
         } else {
             self.distanceInMilesSlider.setValue(Float(dto.distanceInMiles!), animated: true)
         }
+        showOrHideSortOrderSegmentControl()
     }
     
     func createDTOForViewDismissal (){
         let dto = SearchSettingsViewController.searchSettingsDTO
         dto.keyphrase = self.searchTextField.text
         dto.sortType = SortType(rawValue: self.sortTypeSegmentConrtrol.selectedSegmentIndex)
-        dto.sortOrder = SortOrder(rawValue: self.sortTypeSegmentConrtrol.selectedSegmentIndex)
+        dto.sortOrder = SortOrder(rawValue: self.sortOrderSegmentControl.selectedSegmentIndex)
         dto.distanceInMiles = Int(self.distanceInMilesSlider.value)
     }
     
@@ -71,19 +81,27 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     }
     
     func handleResetPressed() {
+        let availbleCategories = SearchSettingsViewController.searchSettingsDTO.availableCategories
+        SearchSettingsViewController.searchSettingsDTO = SearchSettingsDTO()
         self.setValues(SearchSettingsViewController.searchSettingsDTO)
+        SearchSettingsViewController.searchSettingsDTO.availableCategories = availbleCategories
+        showOrHideSortOrderSegmentControl()
     }
     
     func handleTap(recognizer: UITapGestureRecognizer) {
         self.searchTextField.resignFirstResponder()
     }
     
-    @IBAction func handleCurrentCategoryTapped() {
-        performSegueWithIdentifier("filterToCategory", sender: nil)
+    func setCategoryButtonTitle() {
+        if SearchSettingsViewController.searchSettingsDTO.selectedCategory == nil {
+            self.currentCategoryButton.setTitle("All", forState: UIControlState.Normal)
+        } else {
+            self.currentCategoryButton.setTitle(SearchSettingsViewController.searchSettingsDTO.selectedCategory!.name, forState: UIControlState.Normal)
+        }
     }
     
-    @IBAction func handleSortTypeSegmentConrolValueChanged(sender: UISegmentedControl) {
-        if sender.selectedSegmentIndex == 1 {
+    func showOrHideSortOrderSegmentControl () {
+        if sortTypeSegmentConrtrol.selectedSegmentIndex == 1 {
             self.sortOrderSegmentControl.enabled = true
             UIView.animateWithDuration(0.3, animations: {
                 self.sortOrderSegmentControl.alpha = 1
@@ -91,10 +109,18 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
         } else {
             UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.sortOrderSegmentControl.alpha = 0
-            }, completion: { (_) -> Void in
-                self.sortOrderSegmentControl.enabled = false
+                }, completion: { (_) -> Void in
+                    self.sortOrderSegmentControl.enabled = false
             })
         }
+    }
+    
+    @IBAction func handleCurrentCategoryTapped() {
+        performSegueWithIdentifier("filterToCategory", sender: nil)
+    }
+    
+    @IBAction func handleSortTypeSegmentConrolValueChanged(sender: UISegmentedControl) {
+        showOrHideSortOrderSegmentControl()
     }
     
     @IBAction func handleSortOrderSegmentConrolValueChanged(sender: UISegmentedControl) {
@@ -102,6 +128,9 @@ class SearchSettingsViewController : UIViewController, UITextFieldDelegate {
     
     @IBAction func handleApplyButtonPressed(sender: UIButton) {
         self.createDTOForViewDismissal()
-        self.navigationController?.popViewControllerAnimated(true)
+        if self.delegate != nil {
+            self.delegate!.loadItems()
+        }
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

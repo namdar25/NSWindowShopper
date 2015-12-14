@@ -32,6 +32,7 @@ class SearchResultsProxy {
     // MARK - Network Interface
     
     func loadItemsWithSearchSettingsDTO(searchSettingsDTO : SearchSettingsDTO?) {
+        self.loadedItems = nil
         self.lastSearchSettingsDTO = searchSettingsDTO;
         
         let mutableString = NSMutableString(format: "%@", "https://\(self.urlToLoad())/?page=\(self.pageNumber)");

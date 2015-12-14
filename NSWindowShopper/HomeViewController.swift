@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProxyDelegate, CategoryProxyDelegate {
+class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProxyDelegate, CategoryProxyDelegate, SearchSettingsDelegate {
     
     var hasAddedConstraints = false
 
@@ -116,6 +116,7 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     func handleSearchSettingsNavigation(sender: AnyObject) {
         let storyboard = UIStoryboard(name: "SearchSettingsViewController", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("SearchSettingsViewController") as! SearchSettingsViewController
+        vc.delegate = self
         let navController = UINavigationController(rootViewController: vc);
         self.presentViewController(navController, animated: true, completion: nil)
     }
@@ -126,19 +127,7 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
         self.startLoadingAnimations()
         
         self.itemsToDisplay = nil;
-        self.searchResultsProxy!.loadItemsWithSearchSettingsDTO(tempTestSearchSettings())
-    }
-    
-    private func tempTestSearchSettings() -> SearchSettingsDTO {
-        let settings = SearchSettingsDTO()
-        
-        settings.keyphrase = "Seahawks"
-        
-        let category = Category()
-        category.id = 5
-        settings.selectedCategory = category
-        
-        return settings;
+        self.searchResultsProxy!.loadItemsWithSearchSettingsDTO(SearchSettingsViewController.searchSettingsDTO)
     }
     
     func reloadItems() {
