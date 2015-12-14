@@ -131,6 +131,9 @@ class HomeViewController : UIViewController, ItemDataProvider, SearchResultsProx
     
     private func tempTestSearchSettings() -> SearchSettingsDTO {
         let settings = SearchSettingsDTO()
+        
+        settings.keyphrase = "Seahawks"
+        
         let category = Category()
         category.id = 5
         settings.selectedCategory = category

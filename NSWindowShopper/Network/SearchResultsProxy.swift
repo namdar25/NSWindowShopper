@@ -35,13 +35,14 @@ class SearchResultsProxy {
         self.lastSearchSettingsDTO = searchSettingsDTO;
         
         let mutableString = NSMutableString(format: "%@", "https://\(self.urlToLoad())/?page=\(self.pageNumber)");
-        if (searchSettingsDTO != nil) {
-            if (searchSettingsDTO?.selectedCategory != nil) {
-                let id : Int = (searchSettingsDTO?.selectedCategory!.id)!
-                mutableString.appendFormat("%@", "&cid=\(id)")
-            }
+        if (self.lastSearchSettingsDTO != nil) {
+            self.appendKeyphraseParameterToString(mutableString)
+            self.appendCategoryParameterToString(mutableString)
+            self.appendPriceRangeParameterToString(mutableString)
+            self.appendSortParameterToString(mutableString)
+            self.appendDistanceRadiusToString(mutableString)
         }
-        print(mutableString)
+
         let urlToLoad = NSURL(string: mutableString as String);
         if (urlToLoad == nil) {
             return;
@@ -61,12 +62,78 @@ class SearchResultsProxy {
         self.loadItemsWithSearchSettingsDTO(self.lastSearchSettingsDTO)
     }
     
+    // MARK - Sort/Filter Configuration
+    
+    private func appendKeyphraseParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.keyphrase == nil) {
+            return;
+        }
+        
+        mutableString.appendFormat("%@", "&q=\((self.lastSearchSettingsDTO?.keyphrase)!)");
+    }
+    
+    private func appendCategoryParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.selectedCategory == nil) {
+            return;
+        }
+        
+        let id : Int = (self.lastSearchSettingsDTO?.selectedCategory!.id)!;
+        mutableString.appendFormat("%@", "&cid=\(id)");
+    }
+    
+    private func appendPriceRangeParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.priceMin != nil) {
+            let min = Int((self.lastSearchSettingsDTO?.priceMin)!)
+            mutableString.appendFormat("%@", "&price_min=\(min)");
+        }
+        
+        if (self.lastSearchSettingsDTO?.priceMax != nil) {
+            let max = Int((self.lastSearchSettingsDTO?.priceMax)!)
+            mutableString.appendFormat("%@", "&price_max=\(max)");
+        }
+    }
+    
+    private func appendSortParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.sortType != nil) {
+            switch (self.lastSearchSettingsDTO?.sortType)! {
+            case SortType.Price:
+                self.appendPriceSortParameterToString(mutableString);
+                break;
+            case SortType.Distance:
+                mutableString.appendFormat("%@", "&sort=distance");
+                break;
+            case SortType.Newest:
+                mutableString.appendFormat("%@", "&sort=-posted");
+                break;
+            }
+        }
+    }
+    
+    private func appendPriceSortParameterToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.sortOrder != nil) {
+            var orderString = ""
+            if (self.lastSearchSettingsDTO?.sortOrder == SortOrder.Descending) {
+                orderString = "-"
+            }
+            
+            mutableString.appendFormat("&sort=%@price", orderString)
+        }
+    }
+    
+    private func appendDistanceRadiusToString(mutableString : NSMutableString) {
+        if (self.lastSearchSettingsDTO?.distanceInMiles == nil) {
+            return;
+        }
+        let roundedDistance = ((self.lastSearchSettingsDTO?.distanceInMiles)!/10)*10
+        mutableString.appendFormat("%@", "&radius=\(roundedDistance)")
+    }
+    
     // MARK - Delegate Interface
     
     private func notifyDelegateOfFailure() {
         if(self.delegate != nil) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.delegate!.failedToLoadItems()
+                self.delegate!.failedToLoadItems();
             })
         }
     }
@@ -74,7 +141,7 @@ class SearchResultsProxy {
     private func notifyDelegateOfLoadedItems() {
         if(self.delegate != nil) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.delegate!.loadedItems(self.loadedItems!)
+                self.delegate!.loadedItems(self.loadedItems!);
             })
         }
     }
@@ -87,22 +154,22 @@ class SearchResultsProxy {
         
         let task = urlSession.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error != nil || data == nil) {
-                self.notifyDelegateOfFailure()
+                self.notifyDelegateOfFailure();
             } else {
                 let parsedItemData : [Item]? = self.parseJsonData(data!);
                 if (parsedItemData == nil) {
-                    self.notifyDelegateOfFailure()
+                    self.notifyDelegateOfFailure();
                 } else {
                     if (self.loadedItems == nil) {
-                        self.loadedItems = parsedItemData!
+                        self.loadedItems = parsedItemData!;
                     } else {
-                        self.loadedItems!.appendContentsOf(parsedItemData!)
+                        self.loadedItems!.appendContentsOf(parsedItemData!);
                     }
-                    self.notifyDelegateOfLoadedItems()
+                    self.notifyDelegateOfLoadedItems();
                 }
             }
         }
-        task.resume()
+        task.resume();
     }
     
     // MARK - JSON Parsing

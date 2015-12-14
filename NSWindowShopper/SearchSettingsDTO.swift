@@ -10,6 +10,7 @@ import Foundation
 
 enum SortType{
     case Price
+    case Newest
     case Distance
 }
 
@@ -19,11 +20,18 @@ enum SortOrder{
 }
 
 class SearchSettingsDTO {
+    
+    var keyphrase : String?
+    
     var availableCategories : [Category]?
     var selectedCategory : Category?
-    var sortType : SortType? = SortType.Price
-    var sortOrder : SortOrder? = SortOrder.Ascending
-    var priceMin : Double? = 0.0
-    var priceMax : Double? = DBL_MAX
+    
+    var sortType : SortType?
+    var sortOrder : SortOrder?
+    
+    var priceMin : Double?
+    var priceMax : Double?
+    
     var distanceInMiles : Int? = 30
+    
 }
